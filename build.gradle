@@ -1,0 +1,53 @@
+
+plugins {
+
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+	junitVersion = '5.8.1'
+	junitSuiteVersion = '1.8.1'
+	jerseyVersion = '2.27'
+	jsonVersion = '1.1.4'	
+	assertjVersion = '3.12.2'
+}
+
+dependencies {
+
+	// CDI standalone
+	implementation group: 'org.jboss.weld.se', name: 'weld-se-shaded', version: '4.0.2.Final'
+	
+	// REST Client Jersey
+	// ohne Activation: Warnungen!!
+	implementation group: 'javax.activation', name: 'activation', version: '1.1.1'
+	implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: "${jerseyVersion}"
+	implementation group: 'org.glassfish', name: 'javax.json', version: "${jsonVersion}"
+	// ohne Injection: Fehler zur Laufzeit!
+	implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: "${jerseyVersion}"
+	
+	// JSON-B
+	implementation group: 'javax.json.bind', name: 'javax.json.bind-api', version: '1.0'
+    implementation group: 'org.eclipse', name: 'yasson', version: '1.0.2'
+    implementation  group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
+		
+}
+
+application {
+    mainClass = 'de.esempe.App'
+}
+
+javafx {
+    version = "17"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}

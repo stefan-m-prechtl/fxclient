@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="887.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Anwendung">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Login" />
+                  <MenuItem fx:id="mnuLogout" mnemonicParsing="false" text="Logout" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="mnuExit" mnemonicParsing="false" text="Beenden" />
+               </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Bereich">
+               <items>
+                  <MenuItem fx:id="mnuProject" mnemonicParsing="false" text="Projekt-Verwaltung" />
+                  <MenuItem fx:id="mnuUser" mnemonicParsing="false" text="Benutzer-Verwaltung" />
+               </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Extras">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Hilfe" />
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
