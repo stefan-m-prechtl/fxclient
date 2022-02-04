@@ -101,8 +101,8 @@ public class MainView extends BaseView<BorderPane, MainPresenter>
 			}
 			case PROJECT ->
 			{
-				final ProjectView project = CDI.COMTAINTER.getType(ProjectView.class);
-				this.root.setLeft(project.getRoot());
+				final ProjectView projectView = CDI.COMTAINTER.getType(ProjectView.class);
+				this.root.setCenter(projectView.getRoot());
 			}
 		}
 	}

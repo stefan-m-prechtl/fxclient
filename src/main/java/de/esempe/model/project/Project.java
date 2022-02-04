@@ -1,6 +1,7 @@
 package de.esempe.model.project;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,20 +10,21 @@ public class Project implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private SimpleStringProperty propName = new SimpleStringProperty();
+	private final SimpleStringProperty propName = new SimpleStringProperty();
 
-	private long id;
+	private final UUID objId;
+
 	private String description;
 
-	public Project(final long id, final String name)
+	public Project(final UUID objId, final String name)
 	{
-		this.id = id;
+		this.objId = objId;
 		this.setName(name);
 	}
 
-	public long getId()
+	public UUID getObjId()
 	{
-		return this.id;
+		return this.objId;
 	}
 
 	public String getDescription()
@@ -53,7 +55,7 @@ public class Project implements Serializable
 	@Override
 	public String toString()
 	{
-		return this.getName() + "(ID: " + this.id + ")";
+		return this.getName();
 	}
 
 }

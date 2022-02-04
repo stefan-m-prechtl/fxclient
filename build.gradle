@@ -10,7 +10,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-
 repositories {
     mavenCentral()
 }
@@ -27,6 +26,11 @@ dependencies {
 
 	// CDI standalone
 	implementation group: 'org.jboss.weld.se', name: 'weld-se-shaded', version: '4.0.2.Final'
+
+	// JSON-B
+	implementation group: 'javax.json.bind', name: 'javax.json.bind-api', version: '1.0'
+    implementation group: 'org.eclipse', name: 'yasson', version: '1.0.2'
+    implementation  group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
 	
 	// REST Client Jersey
 	// ohne Activation: Warnungen!!
@@ -35,16 +39,33 @@ dependencies {
 	implementation group: 'org.glassfish', name: 'javax.json', version: "${jsonVersion}"
 	// ohne Injection: Fehler zur Laufzeit!
 	implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: "${jerseyVersion}"
-	
-	// JSON-B
-	implementation group: 'javax.json.bind', name: 'javax.json.bind-api', version: '1.0'
-    implementation group: 'org.eclipse', name: 'yasson', version: '1.0.2'
-    implementation  group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
-		
+
+	// JUnit5-Testing
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+	testImplementation "org.junit.platform:junit-platform-suite:${junitSuiteVersion}"
+    // Erweiterung: siehe http://joel-costigliola.github.io/assertj/assertj-core-quick-start.html
+	testImplementation group: 'org.assertj', name: 'assertj-core', version: "${assertjVersion}"
+
 }
+
 
 application {
     mainClass = 'de.esempe.App'
+}
+
+test {
+    useJUnitPlatform {
+    	// Normale Tests nicht ausführen, nur die Testsuite
+    	excludeEngines 'junit-jupiter'
+    }
+    
+    // show standard out and standard error of the test JVM(s) on the console
+  	testLogging.showStandardStreams = true
+  	// listen to events in the test execution lifecycle
+    beforeTest { 
+    	//descriptor -> logger.lifecycle("Running test: " + descriptor.getClassName() + ":" + descriptor.getName())
+    	descriptor -> logger.lifecycle("Running test: " + descriptor)
+  	}
 }
 
 javafx {
