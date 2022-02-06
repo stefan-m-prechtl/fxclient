@@ -3,7 +3,7 @@ package de.esempe.gui;
 import java.net.URL;
 
 import de.esempe.gui.project.ProjectView;
-import de.esempe.model.UserSession;
+import de.esempe.gui.user.UserView;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -23,8 +23,6 @@ public class MainView extends BaseView<BorderPane, MainPresenter>
 	{
 		PROJECT, USER
 	}
-
-	private UserSession session;
 
 	// ### GUI elements: Controls, Layouts,...
 	@FXML
@@ -61,11 +59,12 @@ public class MainView extends BaseView<BorderPane, MainPresenter>
 		try
 		{
 			final URL fxmlUrl = this.getClass().getResource("/fxml/mainview.fxml");
-			FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+			final FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
 			fxmlLoader.setController(this);
 			this.root = fxmlLoader.load();
 
-		} catch (Exception e)
+		}
+		catch (final Exception e)
 		{
 			System.out.println(e.getMessage());
 		}
@@ -86,18 +85,19 @@ public class MainView extends BaseView<BorderPane, MainPresenter>
 	{
 		this.mnuExit.setOnAction(e -> this.presenter.exit());
 		this.mnuUser.setOnAction(e -> this.presenter.showUserPerspective());
+		this.mnuProject.setOnAction(e -> this.presenter.showProjectPerspective());
+
 	}
 
 	// ##### Action Handler ####
-
 	public void changePerspective(final PERSPECTIVE_TYPE type)
 	{
 		switch (type)
 		{
 			case USER ->
 			{
-				// final UserView users= CDI.COMTAINTER.getType(UserView.class);
-				// this.root.setLeft(users);
+				final UserView users = CDI.COMTAINTER.getType(UserView.class);
+				this.root.setCenter(users.getRoot());
 			}
 			case PROJECT ->
 			{
