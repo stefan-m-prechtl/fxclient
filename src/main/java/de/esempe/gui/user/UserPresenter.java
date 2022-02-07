@@ -9,8 +9,6 @@ import de.esempe.service.user.UserService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.ObservesAsync;
 import jakarta.inject.Inject;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 @ApplicationScoped
 public class UserPresenter extends BasePresenter<UserView>
@@ -33,15 +31,8 @@ public class UserPresenter extends BasePresenter<UserView>
 	{
 		// Alle Projekte per REST-API laden
 		this.userList = this.service.loadAll();
-		// Modell zu View-Modell umwandeln
-		final ObservableList<String> searchresult = FXCollections.observableArrayList();
-		for (final User user : this.userList)
-		{
-			String userAsString = user.getLogin() + ": " + user.getLastname() + ", " + user.getFirstname();
-			searchresult.add(userAsString);
-		}
 		// Benutzer im View anzeigen
-		this.view.showList(searchresult);
+		this.view.showList(this.userList);
 
 	}
 
