@@ -37,10 +37,11 @@ public class UserPresenter extends BasePresenter<UserView>
 		final ObservableList<String> searchresult = FXCollections.observableArrayList();
 		for (final User user : this.userList)
 		{
-			searchresult.add(user.getLogin());
+			String userAsString = user.getLogin() + ": " + user.getLastname() + ", " + user.getFirstname();
+			searchresult.add(userAsString);
 		}
-		// Projekte im View anzeigen
-		// this.view.showList(searchresult);
+		// Benutzer im View anzeigen
+		this.view.showList(searchresult);
 
 	}
 
