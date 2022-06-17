@@ -3,7 +3,7 @@ package de.esempe.gui.login;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-import de.esempe.gui.ApplicationRegistry;
+import de.esempe.ApplicationRegistry;
 import de.esempe.gui.i18n.BundleKeys;
 import de.esempe.gui.i18n.BundleUtil;
 import de.esempe.service.login.LoginService;
@@ -12,6 +12,8 @@ import jakarta.inject.Inject;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -38,7 +40,7 @@ public class LoginDialog extends Dialog<Pair<Boolean, String>>
 	LoginService service;
 
 	@Inject
-	public LoginDialog(ApplicationRegistry registry)
+	public LoginDialog(final ApplicationRegistry registry)
 	{
 		super();
 		this.loginResult = null;
@@ -119,23 +121,27 @@ public class LoginDialog extends Dialog<Pair<Boolean, String>>
 	}
 
 	// ##### Action Handler ####
-	private void handleOk(ActionEvent event)
+	private void handleOk(final ActionEvent event)
 	{
-		// direct call of service without any presenter: perform login
+		// Login am Server per REST-Service durchführen: Ergebnis ist ein Json-Web-Token (JWT)
 		final var token = this.service.login(this.username.getText(), this.password.getText());
-		// final var token =
-		// "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUcmVlRGVtbyIsImlzcyI6IkVTRyIsInVzZXJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6InN0ZWZhbiJ9.wpsOqdnTka3Q0pnG2qELPo_wDrTVKRHFPAKrIqciS2k";
-		// final var loginResult = true;
 
 		// set dialog result and close dialog
 		if (!token.isEmpty())
 		{
 			this.loginResult = token;
+			this.registry.putUsername(this.username.getText());
 		}
 		else
 		{
 			// do nothing
 			event.consume();
+			this.registry.putUsername("Keine gültiger Benutzer");
+
+			final Alert errAlert = new Alert(AlertType.ERROR);
+			errAlert.setHeaderText("Ungültige Login-Daten");
+			errAlert.setContentText("Login fehlerhaft - Http Code " + this.registry.getCurrentHttpCode());
+			errAlert.showAndWait();
 		}
 	}
 }

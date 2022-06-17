@@ -1,10 +1,7 @@
 package de.esempe.gui;
 
 import de.esempe.gui.MainView.PERSPECTIVE_TYPE;
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.ObservesAsync;
-import jakarta.inject.Inject;
 import javafx.application.Platform;
 
 /**
@@ -15,19 +12,8 @@ import javafx.application.Platform;
 public class MainPresenter extends BasePresenter<MainView>
 {
 
-	@Inject
-	protected MainPresenter(final MainView view)
-	{
-		super(view);
-	}
-
-	@PostConstruct
-	void created()
-	{
-
-	}
-
-	void initView(@ObservesAsync final MessageEvent e)
+	@Override
+	protected void viewInitialized()
 	{
 		// System.out.println("got event:" + e.getMsg());
 	}

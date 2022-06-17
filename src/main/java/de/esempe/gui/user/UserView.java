@@ -3,7 +3,7 @@ package de.esempe.gui.user;
 import java.net.URL;
 import java.util.List;
 
-import de.esempe.gui.ApplicationRegistry;
+import de.esempe.ApplicationRegistry;
 import de.esempe.gui.BaseView;
 import de.esempe.model.user.User;
 import jakarta.annotation.PostConstruct;
@@ -41,7 +41,7 @@ public class UserView extends BaseView<AnchorPane, UserPresenter>
 	@Inject
 	public UserView(final UserPresenter presenter, final ApplicationRegistry registry)
 	{
-		super(presenter, registry);
+		super(registry);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class UserView extends BaseView<AnchorPane, UserPresenter>
 
 	// ### Interface for Presenter ####
 
-	void showList(List<User> users)
+	void showList(final List<User> users)
 	{
 		final ObservableList<User> viewmodel = FXCollections.observableArrayList();
 		viewmodel.addAll(users);

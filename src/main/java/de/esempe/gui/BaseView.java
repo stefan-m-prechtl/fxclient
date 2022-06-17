@@ -1,9 +1,13 @@
 package de.esempe.gui;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import de.esempe.ApplicationRegistry;
 import de.esempe.gui.i18n.BundleUtil;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Window;
 
@@ -22,9 +26,8 @@ public abstract class BaseView<R extends Parent, P extends BasePresenter>
 	protected ApplicationRegistry registry;
 	protected ResourceBundle bundle;
 
-	protected BaseView(final P presenter, final ApplicationRegistry registry)
+	protected BaseView(final ApplicationRegistry registry)
 	{
-		this.presenter = presenter;
 		this.registry = registry;
 	}
 
@@ -48,4 +51,12 @@ public abstract class BaseView<R extends Parent, P extends BasePresenter>
 		return this.getRoot().getScene().getWindow();
 	}
 
+	protected R loadFxmlAndSetController(final String fxmlResPath, final BaseView view) throws IOException
+	{
+		final URL fxmlUrl = this.getClass().getResource(fxmlResPath);
+		final FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+		fxmlLoader.setController(view);
+		final R result = fxmlLoader.load();
+		return result;
+	}
 }

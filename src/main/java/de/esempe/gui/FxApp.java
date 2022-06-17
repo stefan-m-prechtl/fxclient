@@ -1,13 +1,26 @@
 package de.esempe.gui;
 
 import java.util.Locale;
+import java.util.Optional;
 
+import de.esempe.ApplicationProperties;
+import de.esempe.ApplicationProperties.PropertyName;
+import de.esempe.ApplicationRegistry;
+import de.esempe.gui.login.LoginDialog;
 import jakarta.inject.Inject;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
+/**
+ * JavaFX-Applikation - wird von main() aus App.java gestartet.
+ * 
+ * @author etienne
+ *
+ */
 public class FxApp extends Application
 {
 	@Inject
@@ -21,38 +34,47 @@ public class FxApp extends Application
 	@Override
 	public void init() throws Exception
 	{
-		CDI.COMTAINTER.isRunning();
+		CDI.CONTAINER.isRunning();
 
 		// Init client's registry
-		this.registry = CDI.COMTAINTER.getType(ApplicationRegistry.class);
+		this.registry = CDI.CONTAINER.getType(ApplicationRegistry.class);
 
 		this.registry.putLocale(Locale.GERMAN);
-		// this.registry.putLocale(Locale.ENGLISH);
+
+		// Anwendungs-Properties aus Datei lesen und intern speichern
+		final var appProperties = new ApplicationProperties();
+		appProperties.readProps();
+		this.registry.putApplicationProperties(appProperties);
+
 	}
 
 	@Override
 	public void start(final Stage stage) throws Exception
 	{
 
-		// show login dialog
-//		final LoginDialog dlg = CDI.COMTAINTER.getType(LoginDialog.class);
-//		final Optional<Pair<Boolean, String>> result = dlg.showAndWait();
-//
-//		// if login failed --> terminate application
-//		if (Boolean.FALSE.equals(result.get().getKey()))
-//		{
-//			Platform.exit();
-//			return;
-//		}
-//
-//		// store jwt in client registry (will be used to access user's role)
-//		final var token = result.get().getValue();
-//		this.registry.putJsonWebToken(token);
+		/// Login-Dialog zu erst anzeigen
+		final LoginDialog dlg = CDI.CONTAINER.getType(LoginDialog.class);
+		final Optional<Pair<Boolean, String>> result = dlg.showAndWait();
 
-		// create and show main view
-		final MainView view = CDI.COMTAINTER.getType(MainView.class);
+		// Bei fehlerhaften Login die Anwendung beenden
+		if (Boolean.FALSE.equals(result.get().getKey()))
+		{
+			Platform.exit();
+			return;
+		}
+
+		// Bei korrektem Login das Json-Web-Token intern speichern
+		final var token = result.get().getValue();
+		this.registry.putJsonWebToken(token);
+
+		// Main-View erzeugen und anzeigen
+		final MainView view = CDI.CONTAINER.getType(MainView.class);
 		final Parent parent = view.getRoot();
-		final Scene scene = new Scene(parent, 800, 600);
+
+		final var x = this.registry.getApplicationProperties().getIntegerProperty(PropertyName.DISPLAY_X);
+		final var y = this.registry.getApplicationProperties().getIntegerProperty(PropertyName.DISPLAY_Y);
+
+		final Scene scene = new Scene(parent, x, y);
 		scene.getStylesheets().add("/styles/Styles.css");
 		stage.setTitle("REXT-Client");
 		stage.setResizable(true);
@@ -64,7 +86,7 @@ public class FxApp extends Application
 	@Override
 	public void stop() throws Exception
 	{
-		CDI.COMTAINTER.shutdown();
+		CDI.CONTAINER.shutdown();
 	}
 
 }

@@ -1,5 +1,7 @@
 package de.esempe.service.login;
 
+import java.net.http.HttpResponse;
+
 import de.esempe.service.AbstractService;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -8,20 +10,25 @@ public class LoginService extends AbstractService
 {
 	public LoginService()
 	{
-		super("http://localhost:8080/treebackend/demo/user/login");
+		super("http://localhost:8080/monolith/rext/usermgmt/users/login");
 	}
 
-	public String login(String user, String password)
+	public String login(final String user, final String password)
 	{
 		// TODO Json aus Objekt erzeugen
 		var data = "{\"user\":\"<user>\",\"passwd\":\"<passwd>\"}";
 		data = data.replace("<user>", user);
 		data = data.replace("<passwd>", password);
 
-		// final Response response = this.doPOST("", data);
-		// final String token = response.readEntity(String.class);
-		// return token;
-		return "";
+		final HttpResponse<String> response = this.doPOST("", data);
+		if ((response == null) || (response.statusCode() != 200))
+		{
+			return "";
+		}
+
+		final String token = response.body();
+		return token;
+
 	}
 
 }

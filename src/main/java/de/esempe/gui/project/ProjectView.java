@@ -2,7 +2,7 @@ package de.esempe.gui.project;
 
 import java.net.URL;
 
-import de.esempe.gui.ApplicationRegistry;
+import de.esempe.ApplicationRegistry;
 import de.esempe.gui.BaseView;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,7 +32,7 @@ public class ProjectView extends BaseView<AnchorPane, ProjectPresenter>
 	@Inject
 	public ProjectView(final ProjectPresenter presenter, final ApplicationRegistry registry)
 	{
-		super(presenter, registry);
+		super(registry);
 	}
 
 	@Override
@@ -57,12 +57,12 @@ public class ProjectView extends BaseView<AnchorPane, ProjectPresenter>
 		try
 		{
 			final URL fxmlUrl = this.getClass().getResource("/fxml/projectview.fxml");
-			FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+			final FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
 			fxmlLoader.setController(this);
 			this.root = fxmlLoader.load();
 
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			System.out.println(e.getMessage());
 		}
@@ -87,7 +87,7 @@ public class ProjectView extends BaseView<AnchorPane, ProjectPresenter>
 
 	// ### Interface for Presenter ####
 
-	public void showList(ObservableList<String> projectnames)
+	public void showList(final ObservableList<String> projectnames)
 	{
 		this.searchResultList.clear();
 		this.searchResultList.set(projectnames);

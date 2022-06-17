@@ -1,71 +1,60 @@
-
 plugins {
 
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
 repositories {
+    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 ext {
-	junitVersion = '5.8.1'
-	junitSuiteVersion = '1.8.1'
-	jerseyVersion = '2.27'
-	jsonVersion = '1.1.4'	
-	assertjVersion = '3.12.2'
+	junitVersion = '5.8.2'
+	assertjVersion = '3.22.0'
 }
 
 dependencies {
 
 	// CDI standalone
 	implementation group: 'org.jboss.weld.se', name: 'weld-se-shaded', version: '4.0.2.Final'
-
+	testImplementation 'org.jboss.weld:weld-junit5:4.0.0.Final'
+	
+	// Google Guava
+	implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
+		
 	// JSON-B
 	implementation group: 'javax.json.bind', name: 'javax.json.bind-api', version: '1.0'
     implementation group: 'org.eclipse', name: 'yasson', version: '1.0.2'
     implementation  group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
-	
-	// REST Client Jersey
-	// ohne Activation: Warnungen!!
-	implementation group: 'javax.activation', name: 'activation', version: '1.1.1'
-	implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: "${jerseyVersion}"
-	implementation group: 'org.glassfish', name: 'javax.json', version: "${jsonVersion}"
-	// ohne Injection: Fehler zur Laufzeit!
-	implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: "${jerseyVersion}"
-
-	// JUnit5-Testing
-    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
-	testImplementation "org.junit.platform:junit-platform-suite:${junitSuiteVersion}"
-    // Erweiterung: siehe http://joel-costigliola.github.io/assertj/assertj-core-quick-start.html
-	testImplementation group: 'org.assertj', name: 'assertj-core', version: "${assertjVersion}"
-
-}
-
-
-application {
-    mainClass = 'de.esempe.App'
+    
+    // Json Web Token (JWT)
+	implementation 'com.auth0:java-jwt:3.18.3'
+    
+    // JUnit5-Testing
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "${junitVersion}"
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: "${junitVersion}"
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: "${assertjVersion}"
 }
 
 test {
-    useJUnitPlatform {
-    	// Normale Tests nicht ausführen, nur die Testsuite
-    	excludeEngines 'junit-jupiter'
+	useJUnitPlatform {
+        includeTags("unit-test")
+        includeEngines("junit-jupiter")
     }
-    
-    // show standard out and standard error of the test JVM(s) on the console
-  	testLogging.showStandardStreams = true
-  	// listen to events in the test execution lifecycle
-    beforeTest { 
-    	//descriptor -> logger.lifecycle("Running test: " + descriptor.getClassName() + ":" + descriptor.getName())
-    	descriptor -> logger.lifecycle("Running test: " + descriptor)
-  	}
+}
+
+task (apitest, type: Test, group: 'verification') {
+    description('Integrationstest gegen REST-API Applikationsserver')
+    dependsOn(test)
+	useJUnitPlatform {
+        includeTags("integration-test")
+        includeEngines("junit-jupiter")
+    }
+}
+
+application {
+    mainClass = 'de.esempe.App'
 }
 
 javafx {

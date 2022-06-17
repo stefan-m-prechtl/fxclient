@@ -2,6 +2,8 @@ package de.esempe.gui;
 
 import java.net.URL;
 
+import de.esempe.ApplicationRegistry;
+import de.esempe.LoggerExposer;
 import de.esempe.gui.project.ProjectView;
 import de.esempe.gui.user.UserView;
 import jakarta.annotation.PostConstruct;
@@ -29,9 +31,12 @@ public class MainView extends BaseView<BorderPane, MainPresenter>
 	MenuItem mnuExit, mnuProject, mnuUser;
 
 	@Inject
+	LoggerExposer logger;
+
+	@Inject
 	public MainView(final MainPresenter presenter, final ApplicationRegistry registry)
 	{
-		super(presenter, registry);
+		super(registry);
 	}
 
 	@Override
@@ -62,11 +67,10 @@ public class MainView extends BaseView<BorderPane, MainPresenter>
 			final FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
 			fxmlLoader.setController(this);
 			this.root = fxmlLoader.load();
-
 		}
-		catch (final Exception e)
+		catch (final Exception ex)
 		{
-			System.out.println(e.getMessage());
+			this.logger.fatalErrorConsumer().accept(ex);
 		}
 	}
 
@@ -96,12 +100,12 @@ public class MainView extends BaseView<BorderPane, MainPresenter>
 		{
 			case USER ->
 			{
-				final UserView users = CDI.COMTAINTER.getType(UserView.class);
+				final UserView users = CDI.CONTAINER.getType(UserView.class);
 				this.root.setCenter(users.getRoot());
 			}
 			case PROJECT ->
 			{
-				final ProjectView projectView = CDI.COMTAINTER.getType(ProjectView.class);
+				final ProjectView projectView = CDI.CONTAINER.getType(ProjectView.class);
 				this.root.setCenter(projectView.getRoot());
 			}
 		}

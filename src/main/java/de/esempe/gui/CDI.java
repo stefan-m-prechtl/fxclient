@@ -10,7 +10,7 @@ import jakarta.enterprise.inject.se.SeContainerInitializer;
  */
 public enum CDI
 {
-	COMTAINTER;
+	CONTAINER;
 
 	private SeContainer container;
 
