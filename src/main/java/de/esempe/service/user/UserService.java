@@ -7,16 +7,20 @@ import java.util.List;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 
+import de.esempe.ApplicationRegistry;
+import de.esempe.LoggerExposer;
 import de.esempe.model.user.User;
 import de.esempe.service.AbstractService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class UserService extends AbstractService
 {
-	public UserService()
+	@Inject
+	public UserService(final ApplicationRegistry registry, final LoggerExposer logger)
 	{
-		super("http://localhost:8080/monolith/rext/usermgmt/users");
+		super("usermgmt/users", registry, logger);
 		final JsonbConfig config = new JsonbConfig().withAdapters(new UserJsonAdapter());
 		this.jsonb = JsonbBuilder.create(config);
 	}

@@ -5,16 +5,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class UserServiceTest
+import de.esempe.service.AbstractServiceTest;
+
+/**
+ * Integrationstest mit User-Service.
+ *
+ * @author Stefan Prechtl (www.esempe.de)
+ *
+ */
+@Tag("integration-test")
+@DisplayName("Integrationstest  UserService/REST-API Applikationsserver")
+public class UserServiceTest extends AbstractServiceTest<UserService>
 {
-	private UserService objUnderTest;
 
 	@BeforeEach
 	public void setUp()
 	{
-		this.objUnderTest = new UserService();
+		super.setUp(UserService.class);
+	}
+
+	@Override
+	protected UserService createObjUnderTest()
+	{
+		return new UserService(this.registry, this.logger);
 	}
 
 	@Test
@@ -24,4 +41,5 @@ public class UserServiceTest
 		assertThat(result).isNotNull();
 		assertThat(result).isNotEmpty();
 	}
+
 }

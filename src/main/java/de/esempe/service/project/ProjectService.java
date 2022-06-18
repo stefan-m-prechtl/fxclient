@@ -7,16 +7,21 @@ import java.util.List;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 
+import de.esempe.ApplicationRegistry;
+import de.esempe.LoggerExposer;
 import de.esempe.model.project.Project;
 import de.esempe.service.AbstractService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class ProjectService extends AbstractService
 {
-	public ProjectService()
+
+	@Inject
+	public ProjectService(final ApplicationRegistry registry, final LoggerExposer logger)
 	{
-		super("http://localhost:8080/monolith/rext/projectmgmt/projects");
+		super("projectmgmt/projects", registry, logger);
 		final JsonbConfig config = new JsonbConfig().withAdapters(new ProjectJsonAdapter());
 		this.jsonb = JsonbBuilder.create(config);
 
@@ -34,7 +39,7 @@ public class ProjectService extends AbstractService
 			{
 			}.getClass().getGenericSuperclass());
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			System.out.println(e);
 		}

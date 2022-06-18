@@ -2,15 +2,19 @@ package de.esempe.service.login;
 
 import java.net.http.HttpResponse;
 
+import de.esempe.ApplicationRegistry;
+import de.esempe.LoggerExposer;
 import de.esempe.service.AbstractService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class LoginService extends AbstractService
 {
-	public LoginService()
+	@Inject
+	public LoginService(final ApplicationRegistry registry, final LoggerExposer logger)
 	{
-		super("http://localhost:8080/monolith/rext/usermgmt/users/login");
+		super("usermgmt/users/login", registry, logger);
 	}
 
 	public String login(final String user, final String password)

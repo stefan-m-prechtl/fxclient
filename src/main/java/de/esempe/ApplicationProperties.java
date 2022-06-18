@@ -16,7 +16,7 @@ public class ApplicationProperties
 	public enum PropertyName
 	{
 		// TODO weitere Werte
-		USE_REST_API("useRestAPI"), DISPLAY_X("display_X"), DISPLAY_Y("display_Y");
+		REST_URL("restURL"), USE_REST_API("useRestAPI"), DISPLAY_X("display_X"), DISPLAY_Y("display_Y");
 
 		final String propertyKey;
 

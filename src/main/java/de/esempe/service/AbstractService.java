@@ -12,7 +12,6 @@ import javax.json.bind.Jsonb;
 import de.esempe.ApplicationProperties.PropertyName;
 import de.esempe.ApplicationRegistry;
 import de.esempe.LoggerExposer;
-import jakarta.inject.Inject;
 
 /**
  * Basisklasse für alle konkreten Services für den Zugriff vom Client per REST auf den Server.
@@ -26,15 +25,19 @@ public class AbstractService
 	protected HttpClient client;
 	protected Jsonb jsonb;
 
-	@Inject
-	protected ApplicationRegistry registry;
+	// Basis URL: Server:Port/Warfile/Anwendung, z.B "http://localhost:8080/monolith/rext/"
+	private String baseUrl;
 
-	@Inject
+	protected ApplicationRegistry registry;
 	protected LoggerExposer logger;
 
-	protected AbstractService(final String resourcePath)
+	protected AbstractService(final String resourcePath, final ApplicationRegistry registry, final LoggerExposer logger)
 	{
-		this.resourcePath = resourcePath;
+		this.registry = registry;
+		this.logger = logger;
+
+		final var baseUrl = this.registry.getApplicationProperties().getStringProperty(PropertyName.REST_URL);
+		this.resourcePath = String.join("/", baseUrl, resourcePath);
 		this.client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).connectTimeout(Duration.ofSeconds(3)).build();
 	}
 

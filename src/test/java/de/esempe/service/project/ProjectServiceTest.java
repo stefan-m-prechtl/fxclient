@@ -14,7 +14,7 @@ public class ProjectServiceTest
 	@BeforeEach
 	public void setUp()
 	{
-		this.objUnderTest = new ProjectService();
+		// this.objUnderTest = new ProjectService();
 	}
 
 	@Test
