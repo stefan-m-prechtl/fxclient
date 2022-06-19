@@ -17,7 +17,7 @@ ext {
 dependencies {
 
 	// CDI standalone
-	implementation group: 'org.jboss.weld.se', name: 'weld-se-shaded', version: '4.0.2.Final'
+	implementation group: 'org.jboss.weld.se', name: 'weld-se-shaded', version: '5.0.0.SP2'
 	testImplementation 'org.jboss.weld:weld-junit5:4.0.0.Final'
 	
 	// Google Guava
