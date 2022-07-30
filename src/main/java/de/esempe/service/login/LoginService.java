@@ -14,7 +14,7 @@ public class LoginService extends AbstractService
 	@Inject
 	public LoginService(final ApplicationRegistry registry, final LoggerExposer logger)
 	{
-		super("usermgmt/users/login", registry, logger);
+		super("usermgmt/logins/login", registry, logger);
 	}
 
 	public String login(final String user, final String password)

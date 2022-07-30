@@ -6,7 +6,7 @@ import java.util.Optional;
 import de.esempe.ApplicationProperties;
 import de.esempe.ApplicationProperties.PropertyName;
 import de.esempe.ApplicationRegistry;
-import de.esempe.gui.login.LoginDialog;
+import de.esempe.gui.login.LoginDialogFxml;
 import jakarta.inject.Inject;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -53,7 +53,8 @@ public class FxApp extends Application
 	{
 
 		/// Login-Dialog zu erst anzeigen
-		final LoginDialog dlg = CDI.CONTAINER.getType(LoginDialog.class);
+		final LoginDialogFxml dlg = CDI.CONTAINER.getType(LoginDialogFxml.class);
+		//final LoginDialog dlg = CDI.CONTAINER.getType(LoginDialog.class);
 		final Optional<Pair<Boolean, String>> result = dlg.showAndWait();
 
 		// Bei fehlerhaften Login die Anwendung beenden
@@ -66,7 +67,8 @@ public class FxApp extends Application
 		// Bei korrektem Login das Json-Web-Token intern speichern
 		final var token = result.get().getValue();
 		this.registry.putJsonWebToken(token);
-
+	
+		
 		// Main-View erzeugen und anzeigen
 		final MainView view = CDI.CONTAINER.getType(MainView.class);
 		final Parent parent = view.getRoot();

@@ -68,6 +68,7 @@ public class ApplicationRegistry
 
 	public int getCurrentHttpCode()
 	{
-		return (Integer) this.objMap.get("currenthttpcode");
+		var result = (Integer)((objMap.containsKey("currenthttpcode"))?this.objMap.get("currenthttpcode"):-1);
+		return result;
 	}
 }
